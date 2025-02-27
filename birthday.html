@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday, D!</title>
+    <style>
+      :root {
+        --primary-color: #17bdf0;
+        --secondary-color: #011053;
+        --accent-color: #ff69b4;
+        --text-shadow: 2px 2px 4px rgb(136, 128, 128,0.0);
+        --transition-timing: 0.3s ease-in-out;
+      }
+
+      body {
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--secondary-color), #010a3d);
+        color: white;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+        line-height: 1.6;
+      }
+
+      .content-container 
+      {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+        gap: 40px;
+        max-width: 1200px;
+        width: 100%;
+        margin-top: 30px;
+        padding: 0 20px;
+      }
+
+      .text-container 
+      {
+        position: relative;
+        padding-right: 30px;
+        animation: slideInLeft 1s ease-out;
+      }
+
+      h1 {
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        text-shadow: var(--text-shadow);
+        margin-bottom: 1.5rem;
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        line-height: 1.2;
+        letter-spacing: -0.05em;
+      }
+
+      p {
+        font-size: clamp(1.1rem, 3vw, 1.6rem);
+        text-shadow: var(--text-shadow);
+        margin: 1.5rem 0;
+        padding: 15px;
+        border-left: 3px solid var(--primary-color);
+        transition: var(--transition-timing);
+      }
+
+      p:hover {
+        transform: translateX(10px);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .cake-image {
+        width: min(320px, 90%);
+        height: auto;
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+        animation: float 3s ease-in-out infinite;
+        margin: 2rem 0;
+      }
+
+      .slideshow-container {
+        position: sticky;
+        top: 50px;
+        perspective: 1000px;
+        animation: slideInRight 1s ease-out;
+      }
+
+      .slideshow {
+        width: 400px;
+        height: 700px;
+        border-radius: 15px;
+        overflow: hidden;
+        position: relative;
+        transform-style: preserve-3d;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3),
+          inset 0 0 15px var(--primary-color);
+      }
+
+      .slideshow img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        opacity: 0;
+        transform: scale(0.9) rotateY(15deg);
+        transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .slideshow img.active {
+        opacity: 1;
+        transform: scale(1) rotateY(0);
+        z-index: 1;
+      }
+
+      footer {
+        margin-top: auto;
+        padding: 30px;
+        text-align: center;
+        font-style: italic;
+        opacity: 0.9;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(5px);
+      }
+
+      #playButton {
+        display: none;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          transform: translateX(-50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .content-container {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .text-container {
+          padding-right: 0;
+          text-align: center;
+        }
+
+        p {
+          border-left: none;
+          border-top: 3px solid var(--primary-color);
+          padding: 15px 0;
+        }
+
+        .slideshow-container {
+          position: static;
+          order: -1;
+        }
+
+        .slideshow {
+          height: 400px;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .content-container {
+          gap: 60px;
+        }
+
+        .slideshow {
+          height: 600px;
+        }
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 4px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <!-- Hidden autoplay audio -->
+    <div class="audio-container">
+      <audio id="birthdayAudio" loop>
+        <source src="./image/mysong.mp4" type="audio/mpeg" />
+      </audio>
+      <button id="playButton">🎵 Play Music</button>
+    </div>
+
+    <div class="content-container">
+      <!-- Left side: Text -->
+      <div class="text-container">
+        <h1 style="font-family: 'Brush Script MT', cursive;"><b>Happiiee Birthday, D! 🎉💙</h1></b></h1>
+        <img src="./image/birthday-cake.png" alt="Birthday Cake" class="cake-image" />
+        <p>
+          On your birthday, I want you to know how much you mean to me! ✨💙
+        </p>
+        <p>I'm always here to support you, i've got your back, always! 🌸</p>
+      </div>
+
+      <!-- Right side: Slideshow -->
+      <div class="slideshow-container">
+        <div class="slideshow">
+          <img class="slide" src="./image/1.jpg" alt="Memory 1" />
+          <img class="slide" src="./image/222.jpg" alt="Memory 2" />
+          <img class="slide" src="./image/444.jpg" alt="Memory 3" />
+          <img class="slide" src="./image/555.jpg" alt="Memory 4" />
+          <img class="slide" src="./image/666.jpg" alt="Memory 5" />
+          <img class="slide" src="./image/111.jpg" alt="Memory 6" />
+          <img class="slide" src="./image/333.jpg" alt="Memory 7" />
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      "Haath nahi chhodenge, Saath nahi chhodenge 🌸🗿" -Lip! 
+    </footer>
+
+    <!-- Confetti Animation -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+    <script>
+      // Enhanced Slideshow Logic
+      const slides = document.querySelectorAll(".slide");
+      let currentSlide = 0;
+
+      function nextSlide() {
+        slides[currentSlide].classList.remove("active");
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add("active");
+      }
+
+      // Initialize first slide
+      slides[0].classList.add("active");
+
+      // Auto-advance every 4 seconds
+      setInterval(nextSlide, 4000);
+
+      // Confetti Configuration
+      const fireConfetti = () => {
+        const count = 200;
+        const defaults = {
+          origin: { y: 0.7 },
+          particleCount: 100,
+          spread: 70,
+        };
+
+        confetti({
+          ...defaults,
+          particleCount: count,
+          angle: 60,
+          spread: 55,
+          scalar: 0.8,
+          origin: { x: 0 },
+        });
+
+        confetti({
+          ...defaults,
+          particleCount: count,
+          angle: 120,
+          spread: 55,
+          scalar: 0.8,
+          origin: { x: 1 },
+        });
+      };
+
+      document.body.addEventListener("click", fireConfetti);
+      setTimeout(fireConfetti, 2000);
+      document.addEventListener(
+        "click",
+        function () {
+          const audio = document.getElementById("birthdayAudio");
+          const playButton = document.getElementById("playButton");
+
+          if (audio.paused) {
+            audio
+              .play()
+              .then(() => {
+                playButton.style.display = "none"; // Hide button after playing
+              })
+              .catch((error) => {
+                console.error("Audio play failed:", error);
+              });
+          }
+        },
+        { once: true }
+      ); // Ensures the event runs only once
+    </script>
+  </body>
+</html>
